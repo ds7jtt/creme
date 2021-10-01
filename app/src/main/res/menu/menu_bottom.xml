@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/antt"
+        android:title="안테나"
+        android:icon="@drawable/ant"
+        app:showAsAction="always"
+        />
+
+    <item android:id="@+id/aedd"
+        android:title="제세동"
+        android:icon="@drawable/aed"
+        app:showAsAction="always"
+        />
+
+    <item android:id="@+id/toii"
+        android:title="화장실"
+        android:icon="@drawable/toi"
+        app:showAsAction="always"
+        />
+
+    <item android:id="@+id/hoss"
+        android:title="병원"
+        android:icon="@drawable/hos"
+        app:showAsAction="always"
+        />
+
+    <item android:id="@+id/mouu"
+        android:title="국립공원"
+        android:icon="@drawable/mou"
+        app:showAsAction="always"
+        />
+</menu>

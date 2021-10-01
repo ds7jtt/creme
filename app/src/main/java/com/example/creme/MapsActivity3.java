@@ -1,24 +1,6 @@
 package com.example.creme;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
-import  androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-
-import android.view.Menu;
-import android.view.MenuItem;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
 import android.Manifest;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -29,16 +11,17 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -61,12 +44,14 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
+import kotlin.Metadata;
 
-public class MapsActivity extends AppCompatActivity
+
+public class MapsActivity3  extends AppCompatActivity
         implements OnMapReadyCallback,
-        ActivityCompat.OnRequestPermissionsResultCallback {
+        ActivityCompat.OnRequestPermissionsResultCallback{
 
-    Fragment1 fragment1;
+
 
     LinearLayout container;
 
@@ -86,15 +71,13 @@ public class MapsActivity extends AppCompatActivity
     private static final int IMAGEBTN2_CODE = 2401;
     private static final int IMAGEBTN3_CODE = 2402;
 
-
     public static final int REQUEST_CODE_MENU1 = 101;
-    public static final int REQUEST_CODE_MENU2 = 102;
-    public static final int REQUEST_CODE_MENU3 = 103;
-
+    public static final int REQUEST_CODE_MENU3 = 102;
 
 
     // 앱을 실행하기 위해 필요한 퍼미션을 정의.
-    String[] REQUIRED_PERMISSIONS = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};  // 외부 저장소
+    String[] REQUIRED_PERMISSIONS = {Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION};  // 외부 저장소
 
     Location mCurrentLocation2;
     LatLng currentPoint;
@@ -104,58 +87,19 @@ public class MapsActivity extends AppCompatActivity
     private Location location;
     private View mLayout;
 
+//latlng
+
     private final LatLng SEOULTECH = new LatLng(37.63224, 127.07769);
     private Marker markerSEOULTECH;
     private final LatLng ATOM = new LatLng(37.62877, 127.08268);
     private Marker markerATOM;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_maps);
+        setContentView(R.layout.map2);
 
-        fragment1 = new Fragment1();
-
-        getSupportFragmentManager().beginTransaction().replace(R.id.nav_view, fragment1).commit();
-
-
-        BottomNavigationView bottomNavigation = findViewById(R.id.nav_view);
-        bottomNavigation.setOnNavigationItemSelectedListener(
-                new BottomNavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.antt:
-                                Toast.makeText(getApplicationContext(), "첫 번째 탭 선택됨", Toast.LENGTH_LONG).show();
-                                getSupportFragmentManager().beginTransaction().replace(R.id.nav_view, fragment1).commit();
-
-                                Intent intent = new Intent(getApplicationContext(), MapsActivity2.class);
-                                startActivityForResult(intent, REQUEST_CODE_MENU1);
-                                return  true;
-
-                            case R.id.aedd:
-                            Toast.makeText(getApplicationContext(), "두 번째 탭 선택됨", Toast.LENGTH_LONG).show();
-                            getSupportFragmentManager().beginTransaction().replace(R.id.nav_view, fragment1).commit();
-
-                            Intent intent2 = new Intent(getApplicationContext(), MapsActivity3.class);
-                            startActivityForResult(intent2, REQUEST_CODE_MENU1);
-                            return  true;
-
-                            case R.id.toii:
-                                Toast.makeText(getApplicationContext(), "세 번째 탭 선택됨", Toast.LENGTH_LONG).show();
-                                getSupportFragmentManager().beginTransaction().replace(R.id.nav_view, fragment1).commit();
-
-                                Intent intent3 = new Intent(getApplicationContext(), MapsActivity4.class);
-                                startActivityForResult(intent3, REQUEST_CODE_MENU1);
-                                return  true;
-                        }
-
-                        return false;
-                    }
-                }
-        );
 
         mLayout = findViewById(R.id.layout_main);
 
@@ -182,11 +126,12 @@ public class MapsActivity extends AppCompatActivity
         mapFragment.getMapAsync(this);
     }
 
-
     @Override
     public void onMapReady(final GoogleMap googleMap) {
         Log.d(TAG, "onMapReady :");
         mMap = googleMap;
+
+
         setDefaultLocation();  //디폴트위치로이동
 
         // 1. 위치 퍼미션을 가지고 있는지 체크
@@ -216,7 +161,7 @@ public class MapsActivity extends AppCompatActivity
 
                         // 3-3. 사용자에 퍼미션 요청
                         // 요청 결과는 onRequestPermissionResult에서 수신
-                        ActivityCompat.requestPermissions(MapsActivity.this, REQUIRED_PERMISSIONS,
+                        ActivityCompat.requestPermissions(MapsActivity3.this, REQUIRED_PERMISSIONS,
                                 PERMISSIONS_REQUEST_CODE);
                     }
                 }).show();
@@ -240,18 +185,14 @@ public class MapsActivity extends AppCompatActivity
             }
         });
 
-        /*
-        markerSEOULTECH = googleMap.addMarker(new MarkerOptions()
+
+      markerSEOULTECH = googleMap.addMarker(new MarkerOptions()
                 .position(SEOULTECH)
                 .title("과기대")
                 .snippet("과기과기대"));
 
-        // on map ready end
-        markerATOM = googleMap.addMarker(new MarkerOptions()
-                .position(ATOM)
-                .title("원자력병원")
-                .snippet("병원병원"));
-    */
+
+
     }
 
 
@@ -340,7 +281,6 @@ public class MapsActivity extends AppCompatActivity
     }
 
 
-
     public String getCurrentAddress(LatLng latlng) {
 
         //지오코더, GPS를 주소로 변환
@@ -381,8 +321,6 @@ public class MapsActivity extends AppCompatActivity
     }
 
 
-
-
     public void setCurrentLocation(Location location, String markerTitle, String markerSnippet) {
 
         if (currentMarker != null)
@@ -393,9 +331,9 @@ public class MapsActivity extends AppCompatActivity
         MarkerOptions markerOptions = new MarkerOptions();
 
         markerOptions.position(currentLatLng)
-                     .title(markerTitle)
-                     .snippet(markerSnippet)
-                     .draggable(true);
+                .title(markerTitle)
+                .snippet(markerSnippet)
+                .draggable(true);
 
         currentMarker = mMap.addMarker(markerOptions);
 
@@ -403,7 +341,6 @@ public class MapsActivity extends AppCompatActivity
         mMap.moveCamera(cameraUpdate);
 
     }
-
 
 
     public void setDefaultLocation() {
@@ -473,7 +410,6 @@ public class MapsActivity extends AppCompatActivity
         return false;
 
     }
-
 
 
 
@@ -547,7 +483,7 @@ public class MapsActivity extends AppCompatActivity
     //여기부터는 GPS 활성화를 위한 메소드들
     private void showDialogForLocationServiceSetting() {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(MapsActivity.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(MapsActivity3.this);
         builder.setTitle("위치 서비스 비활성화");
         builder.setMessage("앱을 사용하기 위해서는 위치 서비스가 필요합니다.\n"
                 + "위치 설정을 수정");
@@ -588,5 +524,8 @@ public class MapsActivity extends AppCompatActivity
                 break;
         }
     }
+
+
+
 
 }
