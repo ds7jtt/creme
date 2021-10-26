@@ -1,51 +1,51 @@
 package com.example.creme
-// 서울시 공공 화장실 관련, XML : map3
+// HOS
 
-import android.os.AsyncTask
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
-import org.json.JSONArray
-import org.json.JSONObject
 import android.Manifest
-import android.content.pm.PackageManager
-import androidx.core.app.ActivityCompat
-import java.net.URL
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
+import android.os.AsyncTask
+import android.os.Bundle
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import kotlinx.android.synthetic.main.map3.*
+import kotlinx.android.synthetic.main.mapforhos.*
+import org.json.JSONArray
+import org.json.JSONObject
+import java.net.URL
 
-class MapsActivity4 : AppCompatActivity() {
+
+class HosActivity : AppCompatActivity() {
 
     val PERMISSIONS = arrayOf(
             Manifest.permission.ACCESS_COARSE_LOCATION,
             Manifest.permission.ACCESS_FINE_LOCATION
-                                            )
-    val REQUEST_PERMISSION_CODE = 815 //
+    )
+    val REQUEST_PERMISSION_CODE = 817 //
     val DEFAULT_ZOOM_LEVEL = 16f
     val CITY_HALL =LatLng(37.5662952, 126.9779450)
 
-    var googleMap: GoogleMap? = null
+    var googleMap3: GoogleMap? = null
     // private lateinit var mMap: GoogleMap
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.map3)
+        setContentView(R.layout.mapforhos)
 
-        mapView.onCreate(savedInstanceState)
+        mapView3.onCreate(savedInstanceState)
 
+
+////////////////////
 
         val bottomNavigation = findViewById<BottomNavigationView>(R.id.nav_view)
         bottomNavigation.setOnNavigationItemSelectedListener(
@@ -88,6 +88,10 @@ class MapsActivity4 : AppCompatActivity() {
 
 
 
+////////////////////
+
+
+
 
 
 
@@ -118,8 +122,8 @@ class MapsActivity4 : AppCompatActivity() {
 
     @SuppressLint("MissingPermission")
     fun initMap(){
-        mapView.getMapAsync{
-            googleMap = it
+        mapView3.getMapAsync{
+            googleMap3 = it
             it.uiSettings.isMyLocationButtonEnabled = false
 
 
@@ -143,8 +147,8 @@ class MapsActivity4 : AppCompatActivity() {
         val lastKnownLocation: Location? = locationManager.getLastKnownLocation(locationProvider)
         if (lastKnownLocation != null){
             return LatLng(lastKnownLocation.latitude, lastKnownLocation.longitude)
-    }else{
-        return CITY_HALL
+        }else{
+            return CITY_HALL
         }
     }
 
@@ -152,9 +156,11 @@ class MapsActivity4 : AppCompatActivity() {
         super.onLowMemory()
     }
 
-    val API_KEY = "534e74534e64733734355374416158"
-    var task: ToiletReadTask? = null
-    var toilets = JSONArray()
+    val API_KEY = "5a4d7a4769647337353644644d5769"
+    var task: AedReadTask? = null
+    //ToiletReadTask
+    var aeds = JSONArray()
+//    var toilets = JSONArray()
 
     fun JSONArray.merge(anotherArray: JSONArray) {
         for(i in 0 until anotherArray.length()) {
@@ -163,19 +169,20 @@ class MapsActivity4 : AppCompatActivity() {
     }
 
     fun readData(startIndex: Int, lastIndex: Int) : JSONObject {
-        val url = URL("http://openAPI.seoul.go.kr:8088" + "/${API_KEY}/json/SearchPublicToiletPOIService/${startIndex}/${lastIndex}")
+        val url = URL("http://openAPI.seoul.go.kr:8088" + "/${API_KEY}/json/TvEmgcHospitalInfo/${startIndex}/${lastIndex}")
+        // val url = URL("http://openAPI.seoul.go.kr:8088" + "/${API_KEY}/json/SearchPublicToiletPOIService/${startIndex}/${lastIndex}")
         val connection = url.openConnection()
 
         val data = connection.getInputStream().readBytes().toString(charset("UTF-8"))
-                return JSONObject(data)
+        return JSONObject(data)
     }
 
-    inner class ToiletReadTask : AsyncTask<Void, JSONArray, String>() {
+    inner class AedReadTask : AsyncTask<Void, JSONArray, String>() {
 
         override fun onPreExecute() {
-            googleMap?.clear()
-            toilets = JSONArray()
-    }
+            googleMap3?.clear()
+            aeds = JSONArray()
+        }
 
         override fun doInBackground(vararg p0: Void?): String {
 
@@ -194,10 +201,10 @@ class MapsActivity4 : AppCompatActivity() {
 
                 val jsonObject = readData(startIndex, lastIndex)
 
-                totalCount = jsonObject.getJSONObject("SearchPublicToiletPOIService").getInt("list_total_count")
+                totalCount = jsonObject.getJSONObject("TvEmgcHospitalInfo").getInt("list_total_count")
 
-                val rows = jsonObject.getJSONObject("SearchPublicToiletPOIService").getJSONArray("row")
-                toilets.merge(rows)
+                val rows = jsonObject.getJSONObject("TvEmgcHospitalInfo").getJSONArray("row")
+                aeds.merge(rows)
                 publishProgress(rows)
 
             } while (lastIndex < totalCount)
@@ -218,7 +225,7 @@ class MapsActivity4 : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         task?.cancel(true)
-        task = ToiletReadTask()
+        task = AedReadTask()
         task?.execute()
     }
 
@@ -228,12 +235,12 @@ class MapsActivity4 : AppCompatActivity() {
         task = null
     }
 
-    fun addMarkers(toilet: JSONObject){
-        googleMap?.addMarker(
+    fun addMarkers(aeds: JSONObject){
+        googleMap3?.addMarker(
                 MarkerOptions()
-                        .position(LatLng(toilet.getDouble("Y_WGS84"), toilet.getDouble("X_WGS84")))
-                        .title(toilet.getString("FNAME"))
-                        .snippet(toilet.getString("ANAME"))
+                        .position(LatLng(aeds.getDouble("WGS84LON"), aeds.getDouble("WGS84LAT")))
+                        .title(aeds.getString("DUTYDIVNAM"))
+                        .snippet(aeds.getString("DUTYTEL3"))
 
         )
     }

@@ -32,6 +32,13 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyD0AZLmkXHwHQXh_X-8eiVLXlof9G0RI7c" />
 
+        <activity android:name=".HosActivity"
+    android:label="@string/title_activity_maps"></activity>
+
+        <activity
+            android:name=".AedActivity"
+            android:label="@string/title_activity_maps"></activity>
+
         <activity
             android:name=".MapsActivity4"
             android:label="@string/title_activity_maps4"></activity>
@@ -44,10 +51,9 @@
             android:label="Map3"></activity>
         <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps">
+            android:label="Map4">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

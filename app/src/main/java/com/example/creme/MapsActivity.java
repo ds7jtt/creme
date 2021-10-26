@@ -117,9 +117,7 @@ public class MapsActivity extends AppCompatActivity
         setContentView(R.layout.activity_maps);
 
         fragment1 = new Fragment1();
-
         getSupportFragmentManager().beginTransaction().replace(R.id.nav_view, fragment1).commit();
-
 
         BottomNavigationView bottomNavigation = findViewById(R.id.nav_view);
         bottomNavigation.setOnNavigationItemSelectedListener(
@@ -133,14 +131,15 @@ public class MapsActivity extends AppCompatActivity
 
                                 Intent intent = new Intent(getApplicationContext(), MapsActivity2.class);
                                 startActivityForResult(intent, REQUEST_CODE_MENU1);
+                                finish();
                                 return  true;
 
                             case R.id.aedd:
                             Toast.makeText(getApplicationContext(), "두 번째 탭 선택됨", Toast.LENGTH_LONG).show();
                             getSupportFragmentManager().beginTransaction().replace(R.id.nav_view, fragment1).commit();
-
-                            Intent intent2 = new Intent(getApplicationContext(), MapsActivity3.class);
+                            Intent intent2 = new Intent(getApplicationContext(), AedActivity.class);
                             startActivityForResult(intent2, REQUEST_CODE_MENU1);
+                            finish();
                             return  true;
 
                             case R.id.toii:
@@ -149,6 +148,16 @@ public class MapsActivity extends AppCompatActivity
 
                                 Intent intent3 = new Intent(getApplicationContext(), MapsActivity4.class);
                                 startActivityForResult(intent3, REQUEST_CODE_MENU1);
+                                finish();
+                                return  true;
+
+                            case R.id.hoss:
+                                Toast.makeText(getApplicationContext(), "세 번째 탭 선택됨", Toast.LENGTH_LONG).show();
+                                getSupportFragmentManager().beginTransaction().replace(R.id.nav_view, fragment1).commit();
+
+                                Intent intent4 = new Intent(getApplicationContext(), HosActivity.class);
+                                startActivityForResult(intent4, REQUEST_CODE_MENU1);
+                                finish();
                                 return  true;
                         }
 

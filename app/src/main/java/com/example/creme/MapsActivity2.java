@@ -1,5 +1,5 @@
 package com.example.creme;
-
+// 산 tab 1 과 관련
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,6 +11,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -38,6 +39,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.IOException;
@@ -50,6 +52,9 @@ public class MapsActivity2 extends AppCompatActivity
 
     LinearLayout container;
 
+    Fragment1 fragment1;
+
+    public static final int REQUEST_CODE_MENU1 = 101;
     TextView textView;
     private GoogleMap mMap;
     private Marker currentMarker = null;
@@ -2097,6 +2102,55 @@ public class MapsActivity2 extends AppCompatActivity
 
         setContentView(R.layout.map2);
 
+        fragment1 = new Fragment1();
+
+       // getSupportFragmentManager().beginTransaction().replace(R.id.nav_view, fragment1).commit();
+        BottomNavigationView bottomNavigation = findViewById(R.id.nav_view);
+        bottomNavigation.setOnNavigationItemSelectedListener(
+                new BottomNavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.antt:
+                                Toast.makeText(getApplicationContext(), "첫 번째 탭 선택됨", Toast.LENGTH_LONG).show();
+                                getSupportFragmentManager().beginTransaction().replace(R.id.nav_view, fragment1).commit();
+
+                                Intent intent = new Intent(getApplicationContext(), MapsActivity2.class);
+                                startActivityForResult(intent, REQUEST_CODE_MENU1);
+                                finish();
+                                return  true;
+
+                            case R.id.aedd:
+                                Toast.makeText(getApplicationContext(), "두 번째 탭 선택됨", Toast.LENGTH_LONG).show();
+                                getSupportFragmentManager().beginTransaction().replace(R.id.nav_view, fragment1).commit();
+                                Intent intent2 = new Intent(getApplicationContext(), AedActivity.class);
+                                startActivityForResult(intent2, REQUEST_CODE_MENU1);
+                                finish();
+                                return  true;
+
+                            case R.id.toii:
+                                Toast.makeText(getApplicationContext(), "세 번째 탭 선택됨", Toast.LENGTH_LONG).show();
+                                getSupportFragmentManager().beginTransaction().replace(R.id.nav_view, fragment1).commit();
+
+                                Intent intent3 = new Intent(getApplicationContext(), MapsActivity4.class);
+                                startActivityForResult(intent3, REQUEST_CODE_MENU1);
+                                finish();
+                                return  true;
+
+                            case R.id.hoss:
+                                Toast.makeText(getApplicationContext(), "세 번째 탭 선택됨", Toast.LENGTH_LONG).show();
+                                getSupportFragmentManager().beginTransaction().replace(R.id.nav_view, fragment1).commit();
+
+                                Intent intent4 = new Intent(getApplicationContext(), HosActivity.class);
+                                startActivityForResult(intent4, REQUEST_CODE_MENU1);
+                                finish();
+                                return  true;
+                        }
+
+                        return false;
+                    }
+                }
+        );
         mLayout = findViewById(R.id.layout_main2);
 
         locationRequest = new LocationRequest()
