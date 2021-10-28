@@ -25,6 +25,7 @@ import android.widget.Toast
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.map3.*
+import kotlinx.android.synthetic.main.mapforaed.*
 
 class MapsActivity4 : AppCompatActivity() {
 
@@ -34,7 +35,7 @@ class MapsActivity4 : AppCompatActivity() {
                                             )
     val REQUEST_PERMISSION_CODE = 815 //
     val DEFAULT_ZOOM_LEVEL = 16f
-    val CITY_HALL =LatLng(37.5662952, 126.9779450)
+    val CITY_HALL =LatLng(37.5662953, 126.9779451)
 
     var googleMap: GoogleMap? = null
     // private lateinit var mMap: GoogleMap
@@ -120,13 +121,13 @@ class MapsActivity4 : AppCompatActivity() {
     fun initMap(){
         mapView.getMapAsync{
             googleMap = it
-            it.uiSettings.isMyLocationButtonEnabled = false
+            it.uiSettings.isMyLocationButtonEnabled = true
 
 
             when {
                 hasPermissions() -> {
 
-                    it.isMyLocationEnabled = true
+                 //   it.isMyLocationEnabled = true
                     it.moveCamera(CameraUpdateFactory.newLatLngZoom(getMyLocation(), DEFAULT_ZOOM_LEVEL))
                 }
                 else -> {
@@ -213,6 +214,21 @@ class MapsActivity4 : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun onResume(){
+        super.onResume()
+        mapView.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mapView.onResume()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mapView.onDestroy()
     }
 
     override fun onStart() {

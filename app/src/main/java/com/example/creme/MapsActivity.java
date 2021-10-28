@@ -241,6 +241,7 @@ public class MapsActivity extends AppCompatActivity
 
 
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
+        mMap.getUiSettings().setCompassEnabled(true);
 
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
@@ -335,6 +336,7 @@ public class MapsActivity extends AppCompatActivity
             mFusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
             if (mMap != null)
                 mMap.setMyLocationEnabled(true);
+
         }
     }
 

@@ -25,6 +25,7 @@ import android.widget.Toast
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.mapforaed.*
+// import kotlinx.android.synthetic.main.search_bar.view.*
 
 class AedActivity : AppCompatActivity() {
 
@@ -32,11 +33,11 @@ class AedActivity : AppCompatActivity() {
             Manifest.permission.ACCESS_COARSE_LOCATION,
             Manifest.permission.ACCESS_FINE_LOCATION
     )
-    val REQUEST_PERMISSION_CODE = 816 //
+    val REQUEST_PERMISSION_CODE = 818 //
     val DEFAULT_ZOOM_LEVEL = 16f
-    val CITY_HALL =LatLng(37.5662952, 126.9779450)
+    val CITY_HALL =LatLng(37.5662955, 126.9779453)
 
-    var googleMap2: GoogleMap? = null
+    var googleMap: GoogleMap? = null
     // private lateinit var mMap: GoogleMap
 
 
@@ -95,7 +96,7 @@ class AedActivity : AppCompatActivity() {
 
         }
 
-        ActivityCompat.requestPermissions(this, PERMISSIONS, REQUEST_PERMISSION_CODE)
+        // ActivityCompat.requestPermissions(this, PERMISSIONS, REQUEST_PERMISSION_CODE)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>,
@@ -116,9 +117,8 @@ class AedActivity : AppCompatActivity() {
     @SuppressLint("MissingPermission")
     fun initMap(){
         mapView2.getMapAsync{
-            googleMap2 = it
-            it.uiSettings.isMyLocationButtonEnabled = false
-
+            googleMap = it
+            it.uiSettings.isMyLocationButtonEnabled = true
 
             when {
                 hasPermissions() -> {
@@ -138,12 +138,14 @@ class AedActivity : AppCompatActivity() {
         val locationProvider: String = LocationManager.GPS_PROVIDER
         val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         val lastKnownLocation: Location? = locationManager.getLastKnownLocation(locationProvider)
-        if (lastKnownLocation != null){
+        if(lastKnownLocation != null) {
             return LatLng(lastKnownLocation.latitude, lastKnownLocation.longitude)
         }else{
             return CITY_HALL
         }
     }
+
+
 
     override fun onLowMemory() {
         super.onLowMemory()
@@ -173,7 +175,7 @@ class AedActivity : AppCompatActivity() {
     inner class AedReadTask : AsyncTask<Void, JSONArray, String>() {
 
         override fun onPreExecute() {
-            googleMap2?.clear()
+            googleMap?.clear()
             aeds = JSONArray()
         }
 
@@ -215,6 +217,22 @@ class AedActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume(){
+        super.onResume()
+        mapView2.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mapView2.onResume()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mapView2.onDestroy()
+    }
+
+
     override fun onStart() {
         super.onStart()
         task?.cancel(true)
@@ -229,9 +247,9 @@ class AedActivity : AppCompatActivity() {
     }
 
     fun addMarkers(aeds: JSONObject){
-        googleMap2?.addMarker(
+        googleMap?.addMarker(
                 MarkerOptions()
-                        .position(LatLng(aeds.getDouble("WGS84LON"), aeds.getDouble("WGS84LAT")))
+                        .position(LatLng(aeds.getDouble("WGS84LAT"), aeds.getDouble("WGS84LON")))
                         .title(aeds.getString("MODEL"))
                         .snippet(aeds.getString("MANAGERTEL"))
 

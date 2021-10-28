@@ -18,6 +18,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.android.synthetic.main.map3.*
 import kotlinx.android.synthetic.main.mapforhos.*
 import org.json.JSONArray
 import org.json.JSONObject
@@ -32,7 +33,7 @@ class HosActivity : AppCompatActivity() {
     )
     val REQUEST_PERMISSION_CODE = 817 //
     val DEFAULT_ZOOM_LEVEL = 16f
-    val CITY_HALL =LatLng(37.5662952, 126.9779450)
+    val CITY_HALL =LatLng(37.5662954, 126.9779452)
 
     var googleMap3: GoogleMap? = null
     // private lateinit var mMap: GoogleMap
@@ -124,7 +125,7 @@ class HosActivity : AppCompatActivity() {
     fun initMap(){
         mapView3.getMapAsync{
             googleMap3 = it
-            it.uiSettings.isMyLocationButtonEnabled = false
+            it.uiSettings.isMyLocationButtonEnabled = true
 
 
             when {
@@ -222,6 +223,21 @@ class HosActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume(){
+        super.onResume()
+        mapView3.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mapView3.onResume()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mapView3.onDestroy()
+    }
+
     override fun onStart() {
         super.onStart()
         task?.cancel(true)
@@ -238,7 +254,7 @@ class HosActivity : AppCompatActivity() {
     fun addMarkers(aeds: JSONObject){
         googleMap3?.addMarker(
                 MarkerOptions()
-                        .position(LatLng(aeds.getDouble("WGS84LON"), aeds.getDouble("WGS84LAT")))
+                        .position(LatLng(aeds.getDouble("WGS84LAT"), aeds.getDouble("WGS84LON")))
                         .title(aeds.getString("DUTYDIVNAM"))
                         .snippet(aeds.getString("DUTYTEL3"))
 
