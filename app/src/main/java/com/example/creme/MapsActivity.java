@@ -82,14 +82,9 @@ public class MapsActivity extends AppCompatActivity
     private static final int PERMISSIONS_REQUEST_CODE = 2000; //100
     boolean needRequest = false;
 
-    private static final int IMAGEBTN1_CODE = 2400;
-    private static final int IMAGEBTN2_CODE = 2401;
-    private static final int IMAGEBTN3_CODE = 2402;
 
 
     public static final int REQUEST_CODE_MENU1 = 101;
-    public static final int REQUEST_CODE_MENU2 = 102;
-    public static final int REQUEST_CODE_MENU3 = 103;
 
 
 
