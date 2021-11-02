@@ -23,6 +23,7 @@ import android.location.Location
 import android.location.LocationManager
 import android.widget.Toast
 import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.mapforaed.*
 // import kotlinx.android.synthetic.main.search_bar.view.*
@@ -79,15 +80,17 @@ class AedActivity : AppCompatActivity() {
                             finish()
                             return@OnNavigationItemSelectedListener true
                         }
+                        R.id.mouu -> {
+                            Toast.makeText(applicationContext, "마지막 탭 선택됨", Toast.LENGTH_LONG).show()
+                            val intent5 = Intent(applicationContext, webActivity::class.java)
+                            startActivityForResult(intent5, MapsActivity.REQUEST_CODE_MENU1)
+                            finish()
+                            return@OnNavigationItemSelectedListener true
+                        }
                     }
                     false
                 }
         )
-
-
-
-
-
 
         if(hasPermissions()){
             initMap()
@@ -252,6 +255,7 @@ class AedActivity : AppCompatActivity() {
                         .position(LatLng(aeds.getDouble("WGS84LAT"), aeds.getDouble("WGS84LON")))
                         .title(aeds.getString("MODEL"))
                         .snippet(aeds.getString("MANAGERTEL"))
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
 
         )
     }

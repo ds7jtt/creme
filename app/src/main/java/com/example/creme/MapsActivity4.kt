@@ -23,7 +23,9 @@ import android.location.Location
 import android.location.LocationManager
 import android.widget.Toast
 import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.maps.android.clustering.ClusterManager
 import kotlinx.android.synthetic.main.map3.*
 import kotlinx.android.synthetic.main.mapforaed.*
 
@@ -32,7 +34,7 @@ class MapsActivity4 : AppCompatActivity() {
     val PERMISSIONS = arrayOf(
             Manifest.permission.ACCESS_COARSE_LOCATION,
             Manifest.permission.ACCESS_FINE_LOCATION
-                                            )
+    )
     val REQUEST_PERMISSION_CODE = 815 //
     val DEFAULT_ZOOM_LEVEL = 16f
     val CITY_HALL =LatLng(37.5662953, 126.9779451)
@@ -74,22 +76,24 @@ class MapsActivity4 : AppCompatActivity() {
                             return@OnNavigationItemSelectedListener true
                         }
                         R.id.hoss -> {
-                            Toast.makeText(applicationContext, "세 번째 탭 선택됨", Toast.LENGTH_LONG).show()
+                            Toast.makeText(applicationContext, "네 번째 탭 선택됨", Toast.LENGTH_LONG).show()
                             val intent4 = Intent(applicationContext, HosActivity::class.java)
                             startActivityForResult(intent4, MapsActivity.REQUEST_CODE_MENU1)
                             finish()
                             return@OnNavigationItemSelectedListener true
                         }
+                        R.id.mouu -> {
+                            Toast.makeText(applicationContext, "마지막 탭 선택됨", Toast.LENGTH_LONG).show()
+                            val intent5 = Intent(applicationContext, webActivity::class.java)
+                            startActivityForResult(intent5, MapsActivity.REQUEST_CODE_MENU1)
+                            finish()
+                            return@OnNavigationItemSelectedListener true
+                        }
+
                     }
                     false
                 }
         )
-
-
-
-
-
-
 
 
         if(hasPermissions()){
@@ -117,17 +121,22 @@ class MapsActivity4 : AppCompatActivity() {
         return true
     }
 
+    var clusterManager: ClusterManager<MyItem>? = null
+
     @SuppressLint("MissingPermission")
     fun initMap(){
         mapView.getMapAsync{
-            googleMap = it
-            it.uiSettings.isMyLocationButtonEnabled = true
+          googleMap = it
+          it.uiSettings.isMyLocationButtonEnabled = true
 
+            clusterManager = ClusterManager(this, it)
+            it.setOnCameraIdleListener(clusterManager)
+            it.setOnMarkerClickListener(clusterManager)
 
             when {
                 hasPermissions() -> {
 
-                 //   it.isMyLocationEnabled = true
+                    //   it.isMyLocationEnabled = true
                     it.moveCamera(CameraUpdateFactory.newLatLngZoom(getMyLocation(), DEFAULT_ZOOM_LEVEL))
                 }
                 else -> {
@@ -144,8 +153,8 @@ class MapsActivity4 : AppCompatActivity() {
         val lastKnownLocation: Location? = locationManager.getLastKnownLocation(locationProvider)
         if (lastKnownLocation != null){
             return LatLng(lastKnownLocation.latitude, lastKnownLocation.longitude)
-    }else{
-        return CITY_HALL
+        }else{
+            return CITY_HALL
         }
     }
 
@@ -168,7 +177,7 @@ class MapsActivity4 : AppCompatActivity() {
         val connection = url.openConnection()
 
         val data = connection.getInputStream().readBytes().toString(charset("UTF-8"))
-                return JSONObject(data)
+        return JSONObject(data)
     }
 
     inner class ToiletReadTask : AsyncTask<Void, JSONArray, String>() {
@@ -176,11 +185,11 @@ class MapsActivity4 : AppCompatActivity() {
         override fun onPreExecute() {
             googleMap?.clear()
             toilets = JSONArray()
-    }
+        }
 
         override fun doInBackground(vararg p0: Void?): String {
 
-            val step = 1000;
+            val step = 888;
             var startIndex = 1
             var lastIndex = step
             var totalCount = 0
@@ -211,8 +220,11 @@ class MapsActivity4 : AppCompatActivity() {
             array?.let{
                 for (i in 0 until array.length()) {
                     addMarkers(array.getJSONObject(i))
+
                 }
+
             }
+            clusterManager?.cluster()
         }
     }
 
@@ -245,13 +257,29 @@ class MapsActivity4 : AppCompatActivity() {
     }
 
     fun addMarkers(toilet: JSONObject){
+        clusterManager?.addItem(
+                MyItem(
+                        LatLng(toilet.getDouble("Y_WGS84"),toilet.getDouble("X_WGS84")),
+                        toilet.getString("FNAME"),
+                        toilet.getString("ANAME")
+                )
+        )
+    }
+
+
+
+
+
+/*
+    fun addMarkers(toilet: JSONObject){
         googleMap?.addMarker(
                 MarkerOptions()
                         .position(LatLng(toilet.getDouble("Y_WGS84"), toilet.getDouble("X_WGS84")))
                         .title(toilet.getString("FNAME"))
                         .snippet(toilet.getString("ANAME"))
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
 
         )
     }
-
+*/
 }

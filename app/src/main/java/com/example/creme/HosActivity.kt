@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -77,6 +78,13 @@ class HosActivity : AppCompatActivity() {
                             Toast.makeText(applicationContext, "세 번째 탭 선택됨", Toast.LENGTH_LONG).show()
                             val intent4 = Intent(applicationContext, HosActivity::class.java)
                             startActivityForResult(intent4, MapsActivity.REQUEST_CODE_MENU1)
+                            finish()
+                            return@OnNavigationItemSelectedListener true
+                        }
+                        R.id.mouu -> {
+                            Toast.makeText(applicationContext, "마지막 탭 선택됨", Toast.LENGTH_LONG).show()
+                            val intent5 = Intent(applicationContext, webActivity::class.java)
+                            startActivityForResult(intent5, MapsActivity.REQUEST_CODE_MENU1)
                             finish()
                             return@OnNavigationItemSelectedListener true
                         }
@@ -257,6 +265,7 @@ class HosActivity : AppCompatActivity() {
                         .position(LatLng(aeds.getDouble("WGS84LAT"), aeds.getDouble("WGS84LON")))
                         .title(aeds.getString("DUTYDIVNAM"))
                         .snippet(aeds.getString("DUTYTEL3"))
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
 
         )
     }

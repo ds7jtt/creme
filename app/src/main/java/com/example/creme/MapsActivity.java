@@ -154,6 +154,15 @@ public class MapsActivity extends AppCompatActivity
                                 startActivityForResult(intent4, REQUEST_CODE_MENU1);
                                 finish();
                                 return  true;
+
+                            case R.id.mouu:
+                                Toast.makeText(getApplicationContext(), "세 번째 탭 선택됨", Toast.LENGTH_LONG).show();
+                                getSupportFragmentManager().beginTransaction().replace(R.id.nav_view, fragment1).commit();
+
+                                Intent intent5 = new Intent(getApplicationContext(), webActivity.class);
+                                startActivityForResult(intent5, REQUEST_CODE_MENU1);
+                                finish();
+                                return  true;
                         }
 
                         return false;

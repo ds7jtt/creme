@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -36,9 +37,15 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polygon;
+import com.google.android.gms.maps.model.PolygonOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -2181,7 +2188,6 @@ public class MapsActivity2 extends AppCompatActivity
         Log.d(TAG, "onMapReady :");
         mMap = googleMap;
 
-
         setDefaultLocation();  //디폴트위치로이동
 
         // 1. 위치 퍼미션을 가지고 있는지 체크
@@ -2225,7 +2231,6 @@ public class MapsActivity2 extends AppCompatActivity
             }
         }
 
-
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
 
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
@@ -2246,6 +2251,28 @@ public class MapsActivity2 extends AppCompatActivity
                 .position(A1)
                 .title("A1")
                 .snippet("37.650402, 126.966599"));
+
+        Circle circle = mMap.addCircle(new CircleOptions()
+                .center(new LatLng(37.655057, 127.010382))
+                .radius(100)
+                .strokeColor(Color.RED));
+
+        Polyline polyline1 = googleMap.addPolyline(new PolylineOptions()
+                .clickable(true)
+                .add(
+                        new LatLng(37.682214, 127.042331),
+                        new LatLng(37.676189, 127.042856),
+                        new LatLng(37.677139, 127.036014)
+                        ));
+        Polygon polygon1 = googleMap.addPolygon(new PolygonOptions()
+                .clickable(true)
+                .add(
+                        new LatLng(37.669503, 127.022781),
+                        new LatLng(37.668272, 127.025153),
+                        new LatLng(37.664987, 127.02885),
+                        new LatLng(37.661194, 127.015939)));
+
+
         markerA2 = googleMap.addMarker(new MarkerOptions()
                 .position(A2)
                 .title("A2")
@@ -6244,7 +6271,6 @@ public class MapsActivity2 extends AppCompatActivity
                 .snippet("37.708949, 126.976821"));
 
 
-
         /*
         markerSEOULTECH = googleMap.addMarker(new MarkerOptions()
                 .position(SEOULTECH)
@@ -6257,8 +6283,8 @@ public class MapsActivity2 extends AppCompatActivity
                 .title("원자력병원")
                 .snippet("병원병원"));
     */
-    }
 
+    }
 
     LocationCallback locationCallback = new LocationCallback() {
         @Override

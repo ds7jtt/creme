@@ -35,6 +35,8 @@
         <activity android:name=".HosActivity"
     android:label="@string/title_activity_maps"></activity>
 
+        <activity android:name=".webActivity">
+            android:label="web"</activity>
         <activity
             android:name=".AedActivity"
             android:label="@string/title_activity_maps"></activity>
